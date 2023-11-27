@@ -1,0 +1,44 @@
+route_id,service_id,trip_id,trip_headsign,direction_id
+1021-10,US_,1021-10-0,Term. Pirituba,0
+1177-31,U__,1177-31-1,Term. A. E. Carvalho,1
+1178-32,U__,1178-32-0,Pça. Do Correio,0
+1783-10,USD,1783-10-1,Cachoeira,1
+1783-22,U__,1783-22-0,Metrô Santana,0
+573T-31,U__,573T-31-0,Metrô Carrão,0
+6002-10,U__,6002-10-0,Hosp. Pedreira,0
+6008-41,U__,6008-41-0,Jd. Copacabana,0
+6020-10,U__,6020-10-0,Parelheiros,0
+6052-31,U__,6052-31-0,Term. Varginha,0
+607M-10,US_,607M-10-1,Term. Grajaú,1
+6250-10,U__,6250-10-0,Term. Bandeira,0
+637G-10,US_,637G-10-0,Pinheiros,0
+637G-10,US_,637G-10-1,Grajaú,1
+637J-10,U__,637J-10-0,Pinheiros,0
+6400-10,U__,6400-10-0,Term. Bandeira,0
+6422-10,U__,6422-10-0,Term. Bandeira,0
+6475-10,US_,6475-10-0,Term. Bandeira,0
+6475-10,US_,6475-10-1,Jd. Vaz De Lima,1
+675G-41,U__,675G-41-0,Metrô Jabaquara,0
+675G-41,U__,675G-41-1,Jd. Castro Alves,1
+6801-51,U__,6801-51-0,Term. João Dias,0
+6801-51,U__,6801-51-1,Jd. Ibirapuera,1
+6805-31,US_,6805-31-0,Term. João Dias,0
+6805-31,US_,6805-31-1,Term. Capelinha,1
+6835-31,US_,6835-31-0,Term. Capelinha,0
+6835-31,US_,6835-31-1,Valo Velho,1
+6913-21,U__,6913-21-0,Itaim Bibi,0
+695Y-21,U__,695Y-21-0,Cptm Autódromo,0
+695Y-21,U__,695Y-21-1,Term. Parelheiros,1
+695Y-41,U__,695Y-41-1,Term. Parelheiros,1
+6L04-41,US_,6L04-41-0,Term. Parelheiros,0
+6L04-41,US_,6L04-41-1,Jd. Das Fontes,1
+6L04-42,U__,6L04-42-0,Term. Parelheiros,0
+6L04-42,U__,6L04-42-1,Jd. Oriental,1
+7005-10,US_,7005-10-0,Jd. âNgela,0
+701U-10,U__,701U-10-0,Cid. Universitária,0
+701U-10,U__,701U-10-1,Metrô Santana,1
+7021-10,US_,7021-10-0,Term. João Dias,0
+7021-10,US_,7021-10-1,Jd. Maracá,1
+7022-10,USD,7022-10-0,Term. Sto. Amaro,0
+
+

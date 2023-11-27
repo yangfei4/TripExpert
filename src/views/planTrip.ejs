@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Trip Plan</title>
+  <!-- Add a CSS style for the checkmark grid -->
+  <style>
+    .checkmark-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 5px;
+    }
+    .checkmark {
+      text-align: center;
+      font-size: 20px;
+    }
+    table {
+      width: 100%;
+    }
+    th, td {
+      padding: 10px;
+      text-align: center;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+  </style>
+</head>
+<body>
+  <h1>Trip Plan from <%= start %> to <%= destination %></h1>
+
+  <% if (result.length > 0) { %>
+    <table>
+      <tr>
+        <th>Trip ID</th>
+        <th>Departure Stop</th>
+        <th>Arrival Stop</th>
+        <th>Departure Time</th>
+        <th>Arrival Time</th>
+        <th>Duration (Minutes)</th>
+        <th>Monday</th>
+        <th>Tuesday</th>
+        <th>Wednesday</th>
+        <th>Thursday</th>
+        <th>Friday</th>
+        <th>Saturday</th>
+        <th>Sunday</th>
+        <th>Add to My Trip</th> <!-- New column for the button -->
+      </tr>
+      <% result.forEach((row) => { %>
+        <tr>
+          <td><%= row.trip_id %></td>
+          <td><%= row.departure_stop %></td>
+          <td><%= row.arrival_stop %></td>
+          <td><%= row.departure_t %></td>
+          <td><%= row.arrival_t %></td>
+          <td>
+            <% // Calculate time difference in minutes using JavaScript Date objects %>
+            <% const departureTime = new Date(`1970-01-01T${row.departure_t}`).getTime(); %>
+            <% const arrivalTime = new Date(`1970-01-01T${row.arrival_t}`).getTime(); %>
+            <%= Math.floor((arrivalTime - departureTime) / (1000 * 60)) %>
+          </td>
+          <td>
+            <div class="checkmark-grid">
+              <% if (row.monday === 1) { %>
+                <div class="checkmark">&#x2713;</div>
+              <% } else { %>
+                <div class="checkmark">X</div>
+              <% } %>
+            </div>
+          </td>
+          <td>
+            <div class="checkmark-grid">
+              <% if (row.tuesday === 1) { %>
+                <div class="checkmark">&#x2713;</div>
+              <% } else { %>
+                <div class="checkmark">X</div>
+              <% } %>
+            </div>
+          </td>
+          <td>
+            <div class="checkmark-grid">
+              <% if (row.wednesday === 1) { %>
+                <div class="checkmark">&#x2713;</div>
+              <% } else { %>
+                <div class="checkmark">X</div>
+              <% } %>
+            </div>
+          </td>
+          <td>
+            <div class="checkmark-grid">
+              <% if (row.thursday === 1) { %>
+                <div class="checkmark">&#x2713;</div>
+              <% } else { %>
+                <div class="checkmark">X</div>
+              <% } %>
+            </div>
+          </td>
+          <td>
+            <div class="checkmark-grid">
+              <% if (row.friday === 1) { %>
+                <div class="checkmark">&#x2713;</div>
+              <% } else { %>
+                <div class="checkmark">X</div>
+              <% } %>
+            </div>
+          </td>
+          <td>
+            <div class="checkmark-grid">
+              <% if (row.saturday === 1) { %>
+                <div class="checkmark">&#x2713;</div>
+              <% } else { %>
+                <div class="checkmark">X</div>
+              <% } %>
+            </div>
+          </td>
+          <td>
+            <div class="checkmark-grid">
+              <% if (row.sunday === 1) { %>
+                <div class="checkmark">&#x2713;</div>
+              <% } else { %>
+                <div class="checkmark">X</div>
+              <% } %>
+            </div>
+          </td>
+          <td>
+            <form class="addToMyTripForm" data-trip-id="<%= row.trip_id %>"
+                  data-departure-sequence="<%= row.departure_sequence %>"
+                  data-arrival-sequence="<%= row.arrival_sequence %>"
+                  data-departure-time="<%= row.departure_t %>"
+                  data-arrival-time="<%= row.arrival_t %>">
+              <button type="button" class="addToMyTripButton">Add to My Trip</button>
+            </form>
+          </td>
+        </tr>
+      <% }); %>
+    </table>
+  <% } else { %>
+    <p>No trips found for the specified criteria.</p>
+  <% } %>
+
+  <div id="notification"></div>
+
+  <script>
+    // JavaScript code to handle the AJAX request
+    const buttons = document.querySelectorAll('.addToMyTripButton');
+
+    buttons.forEach(button => {
+      button.addEventListener('click', function () {
+        const form = this.parentElement;
+        const trip_id = form.getAttribute('data-trip-id');
+        const departure_sequence = form.getAttribute('data-departure-sequence');
+        const arrival_sequence = form.getAttribute('data-arrival-sequence');
+        const departure_time = form.getAttribute('data-departure-time');
+        const arrival_time = form.getAttribute('data-arrival-time');
+
+        // Create a JavaScript object with the form data
+        const formData = {
+          trip_id: trip_id,
+          departure_sequence: departure_sequence,
+          arrival_sequence: arrival_sequence,
+          departure_time: departure_time,
+          arrival_time: arrival_time
+        };
+
+        // Convert the formData object to a JSON string
+        const jsonData = JSON.stringify(formData);
+
+        // Change button text to "Adding..." during processing
+        this.textContent = 'Adding...';
+
+        fetch('/addToMyTrip', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: jsonData
+        })
+        .then(response => response.json())
+        .then(data => {
+          const notification = document.getElementById('notification');
+          notification.textContent = data.message;
+          notification.style.display = 'block';
+          setTimeout(() => {
+            notification.style.display = 'none';
+          }, 3000);
+
+          // If the request was successful, change the button text to "Added"
+          if (data.success) {
+            console.log("Succeeded to add a path");
+            button.textContent = 'Added';
+            button.disabled = true; // Optionally, you can disable the button
+          }
+        })
+        .catch(error => console.error('Error:', error));
+      });
+    });
+  </script>
+</body>
+</html>

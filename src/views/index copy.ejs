@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>TripExpert</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+    
+      .wrapper {
+        max-width: 1365px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        grid-auto-rows: minmax(100px, auto);
+      }
+    
+      .wrapper > div {
+        border: 2px solid rgb(233 171 88);
+        border-radius: 5px;
+        background-color: rgba(233, 171, 88, 0.5);
+        padding: 1em;
+        color: #d9480f;
+      }
+    
+      .userInfo {
+        grid-column: 1;
+        grid-row: 2 / 4;
+      }
+    
+      .searchTrip {
+        grid-column: 1;
+        grid-row: 6 / 9;
+      }
+    
+      .searchStop {
+        grid-column: 1;
+        grid-row: 4 / 6 ;
+      }
+    
+      .tripPlan {
+        grid-column: 2 / 4;
+        grid-row: 2 / 5;
+      }
+    
+      .myTrip {
+        grid-column: 2 / 4;
+        grid-row: 5 / 9;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>Welcome to TripExpert</h1>
+  
+    <div class="wrapper">
+      <div class="userInfo">
+        <% if (cur_user) { %>
+          <p>Hello, <%= cur_user.first_name %>!</p>
+          <a href="/updatePassword" class="btn btn-primary">Update Password</a>
+          <a href="/logout" class="btn btn-danger">Logout</a>
+          <button class="btn btn-danger" onclick="confirmDelete()">Delete Account</button>
+          <script>
+            function confirmDelete() {
+              const result = confirm("Are you sure you want to delete your account?");
+              if (result) {
+                // If the user confirms, send a POST request to the route that handles account closure
+                fetch('/deleteAccount', {
+                  method: 'POST'
+                })
+                .then(response => {
+                  if (response.ok) {
+                    // If the account was successfully deleted, show a message to the user
+                    alert("Your account has been successfully deleted.");
+                  } else {
+                    // If there was an error deleting the account, show an error message
+                    alert("An error occurred while deleting your account.");
+                  }
+                })
+                .catch(error => {
+                  console.error('Error:', error);
+                  alert("An error occurred while deleting your account.");
+                });
+              }
+            }
+          </script>
+        <% } else { %>
+          <p>Not registered yet? <a href="/register">Click here to register</a></p>
+          <p>Already registered? <a href="/login">Sign in here</a></p>
+        <% } %>
+      </div>
+  
+      <div class="myTrip">
+        <h2>Your Saved Paths</h2>
+        <% if (savedPaths && savedPaths.length > 0) { %>
+          <table>
+            <tr>
+              <th>Departure Stop</th>
+              <th>Arrival Stop</th>
+              <th>Departure Time</th>
+              <th>Arrival Time</th>
+              <th>Monday</th>
+              <th>Tuesday</th>
+              <th>Wednesday</th>
+              <th>Thursday</th>
+              <th>Friday</th>
+              <th>Saturday</th>
+              <th>Sunday</th>
+              <th>Delete</th>
+            </tr>
+            <% savedPaths.forEach((path) => { %>
+              <tr class="saved-path-row" data-path-id="<%= path.path_id %>">
+                <td><%= path.departure_stop %></td>
+                <td><%= path.arrival_stop %></td>
+                <td><%= path.departure_time %></td>
+                <td><%= path.arrival_time %></td>
+                <td>
+                  <div class="checkmark-grid">
+                    <% if (path.monday === 1) { %>
+                      <div class="checkmark">&#x2713;</div>
+                    <% } else { %>
+                      <div class="checkmark">X</div>
+                    <% } %>
+                  </div>
+                </td>
+                <td>
+                  <div class="checkmark-grid">
+                    <% if (path.tuesday === 1) { %>
+                      <div class="checkmark">&#x2713;</div>
+                    <% } else { %>
+                      <div class="checkmark">X</div>
+                    <% } %>
+                  </div>
+                </td>
+                <td>
+                  <div class="checkmark-grid">
+                    <% if (path.wednesday === 1) { %>
+                      <div class="checkmark">&#x2713;</div>
+                    <% } else { %>
+                      <div class="checkmark">X</div>
+                    <% } %>
+                  </div>
+                </td>
+                <td>
+                  <div class="checkmark-grid">
+                    <% if (path.thursday === 1) { %>
+                      <div class="checkmark">&#x2713;</div>
+                    <% } else { %>
+                      <div class="checkmark">X</div>
+                    <% } %>
+                  </div>
+                </td>
+                <td>
+                  <div class="checkmark-grid">
+                    <% if (path.friday === 1) { %>
+                      <div class="checkmark">&#x2713;</div>
+                    <% } else { %>
+                      <div class="checkmark">X</div>
+                    <% } %>
+                  </div>
+                </td>
+                <td>
+                  <div class="checkmark-grid">
+                    <% if (path.saturday === 1) { %>
+                      <div class="checkmark">&#x2713;</div>
+                    <% } else { %>
+                      <div class="checkmark">X</div>
+                    <% } %>
+                  </div>
+                </td>
+                <td>
+                  <div class="checkmark-grid">
+                    <% if (path.sunday === 1) { %>
+                      <div class="checkmark">&#x2713;</div>
+                    <% } else { %>
+                      <div class="checkmark">X</div>
+                    <% } %>
+                  </div>
+                </td>
+                <td>
+                  <form action="/deleteSavedPath" method="post">
+                    <input type="hidden" name="path_id" value="<%= path.path_id %>">
+                    <button type="submit">Delete</button>
+                  </form>
+                </td>
+              </tr>
+            <% }); %>
+          </table>
+        <% } else { %>
+          <p>No saved paths found.</p>
+        <% } %>
+      </div>
+  
+      <div class="searchStop">
+        <h2>Search for stop by name</h2>
+        <form action="stopNameSearch" method="POST">
+          <div class="form-group">
+            <label for="stopname">Stop name</label>
+            <input type="text" class="form-control col-lg-9" id="stopname" aria-describedby="emailHelp" placeholder="Enter Stop Name" name="stopname">
+          </div>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+      </div>
+  
+      <div class="planTrip">
+      <h2>Plan Your Trip</h2>
+      <form action="/planTrip" method="post">
+        <div class="form-group">
+          <label for="start">Start Location:</label>
+          <input type="text" class="form-control col-lg-9" id="start" placeholder="Enter Start Location" name="start" required>
+        </div>
+
+        <div class="form-group">
+          <label for="destination">Destination:</label>
+          <input type="text" class="form-control col-lg-9" id="destination" placeholder="Enter Destination" name="destination" required>
+        </div>
+
+        <div class="form-group">
+          <label for="departure_time">Departure Time:</label>
+          <input type="time" class="form-control col-lg-9" id="departure_time" name="departure_time" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Plan Trip</button>
+      </form>
+      </div>
+  
+    </div>
+  
+  </body>
+</html>

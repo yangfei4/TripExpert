@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Trip Details</title>
+  <style>
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    th, td {
+      border: 1px solid black;
+      padding: 8px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+
+    .input-values {
+      margin-top: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>Trip Details</h1>
+  <% if (result.length === 0) { %>
+    <p>No trips found.</p>
+  <% } else { %>
+    <table>
+      <tr>
+        <th>Trip ID</th>
+        <th>Departure Stop</th>
+        <th>Departure Sequence</th>
+        <th>Arrival Stop</th>
+        <th>Arrival Sequence</th>
+      </tr>
+      <% for (const trip of result) { %>
+        <tr>
+          <td><%= trip.trip_id %></td>
+          <td><%= trip.departure_stop %></td>
+          <td><%= trip.departure_sequence %></td>
+          <td><%= trip.destination_stop %></td>
+          <td><%= trip.arrival_sequence %></td>
+        </tr>
+      <% } %>
+    </table>
+  <% } %>
+
+  <% if (result.length > 0) { %>
+    <div class="input-values">
+      <p>Input Values:</p>
+      <p>lat1: <%= lat1 %>, lon1: <%= lon1 %></p>
+      <p>lat2: <%= lat2 %>, lon2: <%= lon2 %></p>
+    </div>
+  <% } %>
+</body>
+</html>

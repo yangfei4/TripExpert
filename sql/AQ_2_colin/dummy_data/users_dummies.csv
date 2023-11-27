@@ -1,0 +1,2 @@
+user_id,email,password,first_name,last_name
+'1','bsmith@gmail.com','pass123','Bob','Smith'

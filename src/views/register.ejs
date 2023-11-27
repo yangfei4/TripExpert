@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>User Registration</title>
+  <!-- Include necessary CSS frameworks -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+  <div class="container mt-4">
+    <div class="card">
+      <div class="card-body">
+        <h2>Create User</h2>
+        <form action="/register" method="POST">
+          <div class="form-group">
+            <label for="firstName">First Name</label>
+            <input type="text" class="form-control col-lg-9" id="firstName" placeholder="Enter first name" name="firstName" required>
+
+            <label for="lastName">Last Name</label>
+            <input type="text" class="form-control col-lg-9" id="lastName" placeholder="Enter last name" name="lastName" required>
+
+            <label for="email">Email</label>
+            <input type="text" class="form-control col-lg-9" id="email" placeholder="Enter email" name="email" required>
+
+            <label for="password">Password</label>
+            <input type="password" class="form-control col-lg-9" id="password" placeholder="Enter password" name="password" required>
+          </div>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Include necessary JavaScript frameworks (jQuery and Bootstrap) -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

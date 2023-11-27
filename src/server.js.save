@@ -1,0 +1,122 @@
+
+
+var express = require('express');
+var bodyParser = require('body-parser');
+var mysql = require('mysql2');
+var path = require('path');
+var connection = mysql.createConnection({
+  host: '35.232.202.33',
+  user: 'root',
+  password: 'Nm_=,2(6-?+Q+5{<',
+  database: 'pt1_db'
+});
+
+connection.connect;
+
+
+var app = express();
+
+// set up ejs view engine
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(express.static(__dirname + '../public'));
+
+/* GET home page, respond by rendering index.ejs */
+app.get('/', function(req, res) {
+  res.render('index', { title: 'Stop Search' });
+});
+
+app.get('/success', function(req, res) {
+  res.send({'message': 'Input stop id successfully!'});
+});
+
+// this code is executed when a user clicks the form submit button
+app.post('/mark', function(req, res) {
+  var stopid = req.body.stopid;
+  var sql = 'SELECT stop_name FROM Stops WHERE stop_id = ?;';
+
+  console.log(sql);
+  connection.query(
+    sql,
+    [stopid], // insert the input here instead of directly into the string to prevent SQL injection
+    function(err, result) {
+    if (err) {
+      res.send(err);
+      return;
+    }
+
+    res.render('success', {stopNames: result, stopid: stopid});
+  });
+});
+
+app.post('/aq1', function(req, res) {
+  const {lat1, lon1, lat2, lon2} = req.body;
+  var sql = `SELECT
+      st1.trip_id AS trip_id,
+      st1.stop_sequence AS departure_sequence,
+      st2.stop_sequence AS arrival_sequence
+    FROM StopTimes st1
+      JOIN StopTimes st2 USING(trip_id)
+      JOIN Stops s1 ON (st1.stop_id = s1.stop_id)
+      JOIN Stops s2 ON (st2.stop_id = s2.stop_id)
+    WHERE
+      trip_id IN (
+        SELECT DISTINCT trip_id
+        FROM Trips NATURAL JOIN Frequencies NATURAL JOIN Calendar
+        WHERE start_time <= '10:30:00'
+        AND '10:30:00' <= end_time
+        AND Calendar.saturday = 1
+        AND start_date <= '2022-01-01'
+        AND '2022-01-01' <= end_date
+      )
+      AND s1.stop_lat < ? + 0.001 AND s1.stop_lat > ? - 0.001
+      AND s1.stop_lon < ? + 0.001 AND s1.stop_lon > ? - 0.001
+      AND s2.stop_lat < ? + 0.001 AND s2.stop_lat > ? - 0.001
+      AND s2.stop_lon < ? + 0.001 AND s2.stop_lon > ? - 0.001
+      AND st1.stop_sequence <= st2.stop_sequence
+    ORDER BY st2.stop_sequence - st1.stop_sequence ASC;`
+
+  connection.query(
+    sql,
+    [lat1, lat1, lon1, lon1, lat2, lat2, lon2, lon2],
+    function (err, result) {
+      if (err) {
+        res.send(err);
+        return;
+      }
+      console.log(result);
+      res.render('success', {stopNames: [], stopid: '-1'});
+    }
+  );
+});
+
+
+app.post('/createUser', function(req, res) {
+const {firstName, lastName, email, password} = req.body;
+var sql = `
+INSERT INTO Users(user_id, email, password, first_name, last_name)
+VALUES (email, email, password, firstName, lastName)
+;
+`
+
+connection.query(
+sql,
+[firstName, firstName, lastName, email, password],
+function (err, result) {
+if (err) {
+  res.send(err);
+  return;
+}
+console.log(result);
+res.render('success', {stopNames: [], stopid: '-1'});
+}
+);
+});
+
+
+app.listen(80, function () {
+    console.log('Node app is running on port 80');
+});
