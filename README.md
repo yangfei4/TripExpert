@@ -1,11 +1,11 @@
 # TripExpert
 An interactive Trip Planning Web Application, utilizing MySQL for backend management, employing React for frontend development, and harnessing Node.js & Express for server-side functionalities. TripExpert is an interactive trip-planning web application for SPTrans, São Paulo’s public transport system. See [Demo Video](https://drive.google.com/file/d/1-fcdePgbXqwvOv90iU721bA-VMEyztZ9/view)
 
-#### Mockup UI
-<img src="https://github.com/yangfei4/TripExpert/blob/main/doc/project3.png?raw=true" width="500" />
-
-#### Relational Database Design
-<img src="https://github.com/yangfei4/TripExpert/blob/main/doc/db_design.png?raw=true" width="350" /> 
+#### Mockup UI & Relational Database Design
+<p float="left" >
+  <img src="https://github.com/yangfei4/TripExpert/blob/main/doc/project3.png?raw=true" width="400" />
+  <img src="https://github.com/yangfei4/TripExpert/blob/main/doc/db_design.png?raw=true" width="400" /> 
+</p>
 
 ## ✨ Features
 - **Plan a trip**: Users can plan a trip by selecting their location of departure, their destination, and the time at which they would like to depart for their trip.
